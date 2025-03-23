@@ -1,87 +1,139 @@
-/*
-// Calcul de n!
-function fact(n) {
-   if (n === 0 || n === 1) {
-        return 1;
-    }
-   return n * fact(n - 1);
-}
-// Afficher 6!
-console.log(fact(6))
-// Appliquer une fonction aux éléments d'un tableau
-function applique(f, tab) {
-   return tab.map(f);
-}
-// Afficher un tableau des factorielles de 1 à 6
-console.log(applique(fact,[1,2,3,4,5,6]));
-// Afficher un tableau des nombres suivants de 1 à 6
-console.log(applique(function(n) { return (n+1); } , [1,2,3,4,5,6]));
-*/
-
-let msgs = [];
-
-// Fonction de mise à jour
-function update(messages) {
-    // Sélectionne la liste des messages dans le DOM
-    let listContainer = document.querySelector("ul");
-
-    // Efface tout le contenu existant de la liste
-    listContainer.innerHTML = "";
-
-    // Parcourt le tableau de messages et crée des <li>
-    messages.forEach(item => {
-        let li = document.createElement("li");
-        if (item.pseudo) {
-              li.innerHTML = `${item.msg} <br><small>Publié par <strong>${item.pseudo} </strong> le ${item.timestamp}</small>`;
-        } 
-        else {
-              li.textContent = item.msg;
-        }
-        listContainer.appendChild(li);
-    });
+/* Body */
+body {
+    font-family: monospace;
+    background-color: #ffff99;
+    margin: 0;
+    padding: 0;
 }
 
-// Ajout de l'événement sur le bouton pour mettre à jour la liste
-document.querySelector("#màj").addEventListener("click", function() {
-    fetch('https://f78c639f-346e-47d7-994e-291aa6d9472b-00-1zkj4hu6q5ngw.spock.replit.dev/msg/getAll')
-    .then(function(response) {
-      return response.json();
-    })
-    .then(function(data) {
-      update(data.allMsgs);
-    });
-});
+/* Header */
+header {
+    background-color: #ffcc33;
+    color: #3b2b00;
+    text-align: center;
+    padding: 20px;
+}
 
-// Ajout de l'événement sur le bouton pour changer le style de la page
-document.querySelector("#style").addEventListener("click", function() {
-    document.body.classList.toggle('dark-mode');
-});
+h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #3b2b00;
+}
 
-// Ajout de l'événement sur le bouton pour envoyer un message
-document.querySelector("#envoyer").addEventListener("click", function() {
-    let pseudo = document.querySelector("#pseudo").value.trim();
-    let message = document.querySelector("#commentaire").value.trim();
-    if (pseudo && message) {
-        let now = new Date().toLocaleString();
-        fetch(`https://f78c639f-346e-47d7-994e-291aa6d9472b-00-1zkj4hu6q5ngw.spock.replit.dev/msg/post?pseudo=${encodeURIComponent(pseudo)}&msg=${encodeURIComponent(message)}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.code === 1) {
-                console.log("Message ajouté !");
-                document.querySelector("#commentaire").value = "";
-document.querySelector("#pseudo").value = "";
-            };
-        });
-    } else {
-        alert("Merci de remplir le pseudo et le message !");
-    }
-});
+/* List */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
 
-// Mise en relation
-fetch('https://f78c639f-346e-47d7-994e-291aa6d9472b-00-1zkj4hu6q5ngw.spock.replit.dev/msg/getAll')
-.then(function(response) {
-  return response.json();
-})
-.then(function(data) {
-  update(data.allMsgs);
-});
+li {
+    background-color: white;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 3px;
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #3b2b00;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+/* Textarea */
+textarea {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    height: 30px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+textarea:focus {
+   outline: none;
+   }
+[id="pseudo"] { 
+    margin-top: 20px;
+    margin-bottom: 3px;
+    height: 15px;
+}
+
+/* Button */
+button {
+   display: block;
+   margin: 0 auto;
+   background: #ffcc33;
+   padding: 9px 18px;
+   border: none;
+   color: #3b2b00;
+   font-size: 20px;
+   vertical-align: middle;
+   cursor: pointer;
+   font-family: monospace;
+   }
+button:hover {
+   background: #b0870c;
+   color: #ffffff;
+   }
+button:active {
+   background:  #000066;
+   }
+
+[id="envoyer"] { margin-top: 20px;}
+[id="màj"] { margin-top: 20px;}
+[id="style"] { margin-top: 20px;}
+
+/* Style pour le pseudo et la date */
+small {
+  color: grey;
+  font-style: italic;
+  font-size: 0.8em;
+}
+
+/* Dark mode */
+.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Header en mode sombre */
+.dark-mode header {
+  background-color: #333333;
+  color: #e0e0e0;
+}
+.dark-mode h1 {
+  background-color: #333333;
+  color: #e0e0e0;
+}
+
+/* Boutons en mode sombre */
+.dark-mode button {
+  background-color: #333333;
+  color: #e0e0e0;
+  border: 1px solid #555;
+}
+.dark-mode button:hover {
+  background-color: #555;  /* Couleur plus claire au survol */
+  color: #fff;
+}
+.dark-mode button:active {
+  background-color: #777;  /* Couleur plus claire au survol */
+  color: #fff;
+}
+
+/* Textarea en mode sombre */
+.dark-mode textarea {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  border: 1px solid #555;
+}
+
+/* Liste en mode sombre */
+.dark-mode li {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  border: 1px solid #555;
+}
+
